@@ -4,20 +4,16 @@ from collections import Counter
 from math import sqrt
 from sklearn.model_selection import train_test_split
 from sklearn import tree
-from sklearn.metrics import accuracy_score
-from sklearn.model_selection import cross_val_score
-from sklearn.model_selection import GridSearchCV
-import sklearn.metrics as metrics
 from sklearn.metrics import roc_curve,auc,roc_auc_score,recall_score,precision_score,plot_roc_curve, f1_score
 
 training = pd.read_csv(training_file)
 array_training = training.values
-X_training = array_training[:,1:10]
+X_training = array_training[:,1:feaure_number]
 y_training = array_training[:,0]
 X_train, X_test, y_train, y_test = train_test_split(X_training, y_training, test_size=0.25, random_state = 666, stratify=y_training)
 
 def Find_Optimal_Cutoff(TPR, FPR, threshold):
-	y = TPR - FPR
+        y = TPR - FPR
 	Youden_index = np.argmax(y)
 	optimal_threshold = threshold[Youden_index]
 	point = [FPR[Youden_index], TPR[Youden_index]]
@@ -78,8 +74,8 @@ def calculate_MCC(TP_number,FN_number,FP_number,TN_number):
 		MCC = float('nan')
 	return Accuracy, precision, NPV, Sensitivity, Specificity, F1, MCC 
 
-def machine_learning(criterion_option,max_depth_option,min_samples_leaf_option,max_features_option):
-	machine_model = tree.DecisionTreeClassifier(criterion= criterion_option, max_depth=max_depth_option, min_samples_leaf=min_samples_leaf_option,max_features=max_features_option,random_state=666,splitter="best",class_weight='balanced')
+def machine_learning(criterion_option,max_depth_option,min_samples_leaf/split_option,max_features_option):
+	machine_model = tree.DecisionTreeClassifier(criterion= criterion_option, max_depth=max_depth_option, min_samples_leaf/split=min_samples_leaf/split_option,max_features=max_features_option,random_state=666,splitter="best",class_weight='balanced')
 	machine_model.fit(X_train, y_train)
 
 	# probability_score
@@ -129,22 +125,23 @@ def machine_learning(criterion_option,max_depth_option,min_samples_leaf_option,m
 	training_DD = c_training["TN"]
 	training_Accuracy, training_precision, training_NPV, training_Sensitivity, training_Specificity, training_F1, training_MCC = calculate_MCC(
 		training_AA, training_BB, training_CC, training_DD)
-	return("%s,%f,%f,%f,%f,%f,%f,%f" % (criterion_option,max_depth_option,min_samples_leaf_option,max_features_option,AAAAA,train_MCC,test_MCC,training_MCC))
+	return("%s,%f,%f,%f,%f,%f,%f,%f" % (criterion_option,max_depth_option,min_samples_leaf/split_option,max_features_option,AAAAA,train_MCC,test_MCC,training_MCC))
   
 if __name__ == '__main__':
 	result_file = open('1111.csv', 'a')
-	result_file_header = "criterion_option,max_depth_option,min_samples_leaf_option,max_features_option,AAAAA,train_MCC,test_MCC,training_MCC\n"
+	result_file_header = "criterion_option,max_depth_option,min_samples_leaf/split_option,max_features_option,AAAAA,train_MCC,test_MCC,training_MCC\n"
 	result_file.write(result_file_header)
 	DT_criterion = ["entropy","gini"]
 	DT_max_depth = np.arange(3,10,1)
 	DT_min_samples_leaf = np.arange(5,251,5)
-	DT_max_features = np.arange(3,10,1)
+	DT_min_samples_split = np.arange(10,301,10)
+	DT_max_features = np.arange(3,feature_number,1)
 
 	for criterion_option in DT_criterion:
 		for max_depth_option in DT_max_depth:
-			for min_samples_leaf_option in DT_min_samples_leaf:
+			for min_samples_leaf/split_option in DT_min_samples/split_leaf:
 				for max_features_option in DT_max_features:
-					machine_result = machine_learning(criterion_option, max_depth_option, min_samples_leaf_option, max_features_option)
+					machine_result = machine_learning(criterion_option, max_depth_option, min_samples_leaf/split_option, max_features_option)
 					result_file.write(machine_result + "\n")
 
 	result_file.close()
