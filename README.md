@@ -1,2 +1,2 @@
 # MLCsplice
-123
+Predicting nonclassical splice variants effect on splicing
